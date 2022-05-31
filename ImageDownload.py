@@ -186,7 +186,21 @@ def _getVLASS_epoch(hdulist):
 def _checkDuplicated_(fname):
     return os.path.exists(fname)
 
-def DownloadImage(ra, dec, radius, survey, savedir, cache=True):
+def DownloadImage(ra, dec, radius, survey, savedir, cache=False, clearcache=True):
+    """Download Cutout Fits images for a survey
+
+    Args:
+        ra (float): R.A. for the source of interest
+        dec (float): Decl. for the source of interest
+        radius (float): Cutout radius in arcsec
+        survey (str): Survey you need to download
+        savedir (str): Directory to put all fits files
+        cache (bool, optional): Whether use the cache. Defaults to False.
+        clearcache (bool, optional): Whether to clear cache after downloading. Defaults to True.
+
+    Returns:
+        int: -1 for unsuccessful, 0 for successful
+    """
 
     _survey = survey.replace(' ', '_')
     fits_fname = '{}_{}.fits'.format(_survey, int(radius))
@@ -202,6 +216,8 @@ def DownloadImage(ra, dec, radius, survey, savedir, cache=True):
             fits_fname = f'{_survey}_{int(radius)}.fits'
             fitspath = os.path.join(savedir, fits_fname)
             _saveHdulist_(hdulist, fitspath)
+
+        if clearcache: clear_download_cache()
         return 0
 
     if survey == 'PanSTARRS':
@@ -231,7 +247,7 @@ def DownloadImage(ra, dec, radius, survey, savedir, cache=True):
             hdulists = SkyView.get_images(position=f'{ra} {dec}',survey=[survey], radius=radius*u.arcsec,cache=cache)
         except:
             return -1
-    ### format survey name
     
     _saveHdulist_(hdulists[0], fitspath)
+    if clearcache: clear_download_cache()
     return 0

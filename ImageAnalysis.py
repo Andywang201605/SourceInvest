@@ -10,6 +10,8 @@ from astropy.visualization import ZScaleInterval, ImageNormalize
 import matplotlib.pyplot as plt
 import numpy as np
 
+import glob
+
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -118,3 +120,8 @@ class CUTOUTIMAGE(FITSIMAGE):
         self.data = cutout.data
         self.wcs = cutout.wcs
 
+class RACSIMAGE(FITSIMAGE):
+    def __init__(self, racstile, racspath):
+        fitsfiles = glob.glob(f'{racspath}/image*{racstile}*taylor.0*fits')
+        assert len(fitsfiles) > 0, f"NO RACS IMAGE FOUND FOR {racstile}"
+        super().__init__(fitsfiles[0], 0)

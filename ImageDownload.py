@@ -7,7 +7,7 @@ from astropy.coordinates import SkyCoord
 from astropy import units as u
 from astropy.utils.data import clear_download_cache
 
-from astroquery.ipac.ned import Ned
+# from astroquery.ipac.ned import Ned
 from astroquery.skyview import SkyView
 from astroquery.cadc import Cadc
 from astroquery.vizier import Vizier
@@ -15,6 +15,7 @@ from astroquery.simbad import Simbad
 from astroquery.image_cutouts.first import First
 
 import requests
+import io
 import os
 
 def _saveHdulist_(hdulist, fname, overwrite=True):
